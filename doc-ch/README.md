@@ -16,7 +16,7 @@ Jump to [contributing](#contributing).
 
 这个教程开始于我的一个 [博客系列](http://featherweightmusings.blogspot.co.nz/search/label/rust-for-c) 。
 
-这个教程一方面是对我（@nrc）学习Rust的一种帮助（没有比尝试向他人解释的方法来检查您是否学过的东西更好的方法），另一方面是因为我发现学习Rust的现有资源不尽人意——他们**在我已经知道的基础知识上花费了太多时间，并使用了较高级别的直觉来描述可以用较低级别的直觉更好地向我解释的概念**。尽管在那以后，Rust的文档在逐步完善，但是我仍然认为**现有的C ++程序员是Rust的天生目标，但Rust文档并没有很好地满足他们的需求**。
+这个教程一方面是对我（@nrc）学习Rust的一种帮助（没有比尝试向他人解释的方法来检查您是否学过的东西更好的方法），另一方面是因为我发现学习Rust的现有资源不尽人意——他们**在我已经知道的基础知识上花费了太多时间，并使用了较高级别的直觉来描述可以用较低级别的直觉更好地向我解释的概念**。尽管在那以后，Rust的文档在逐步完善，但是我仍然认为**C ++程序员是Rust天生的目标群体，但Rust文档并没有很好地满足C++程序员的需求**。
 
 
 ## Contents
@@ -70,33 +70,23 @@ If you're not sure of something, please get in touch by pinging me here
 
 ### Style
 
-Obviously, the intended audience is C++ programmers. The tutorial should
-concentrate on things that will be new to experienced C++ programmers, rather
-than a general audience (although, I don't assume the audience is familiar with
-the most recent versions of C++). I'd like to avoid too much basic material and
-definitely avoid too much overlap with other resources, in particular the Rust
-guide/book.
+很明显，本教程的目标受众是C++程序员。本教程理应专注于那些对C++程序员来说是新颖的事物，避免与其他通用 Rust 文档的冗余和重叠。
 
 Work on edge case use cases (e.g., using a different build system from Cargo, or
 writing syntax extensions, using unstable APIs) is definitely welcome, as is
 in-depth work on topics already covered at a high level.
 
-I'd like to avoid recipe-style examples for converting C++ code to Rust code,
-but small examples of this kind are OK.
+非主流的用例(比如使用Cargo之外的工具链，编写语法扩展，使用非stable接口的)也是欢迎的，就像是对 已经在高层次上覆盖的内容 做深入研究。
 
-Use of different formats (e.g., question and answer/FAQs, or larger worked
-examples) are welcome.
+我会尽量避免使用一些僵硬的例子，将C++代码直接翻译成Rust代码，但有一些这样的小例子是OK的（用于直观地对语言特性做类比）。
 
-I don't plan on adding exercises or suggestions for mini-projects, but if you're
-interested in that, let me know.
+使用不同的形式也是欢迎的。(比如：问答形式/FAQs, 或者 更大的示例)
 
-I'm aiming for a fairly academic tone, but not too dry. All writing should be in
-English (British English, not American English; although I would be very happy
-to have localisations/translations into any language, including American
-English) and be valid GitHub markdown. For advice on writing style, grammar,
-punctuation, etc. see the Oxford Style Manual
-or [The Economist Style Guide](http://www.economist.com/styleguide/introduction).
-Please limit width to 80 columns. I am a fan of the Oxford comma.
+我目前 没有为 mini-projects 添加 练习或建议的计划，但如果你感兴趣的话，请联系我。
 
-Don't feel like work has to be perfect to be submitted, I'm happy to edit and
-I'm sure other people will be in the future.
+我的目标是保持学术风格，但不要太干。所有写作均应使用英语（英式英语，而不是美式英语；不过我很欢迎将文档本地化/翻译成任何语言，包括美式英语），并且必须是有效的GitHub markdown。有关写作风格，语法，标点符号等方面的建议，请参阅 Oxford Style Manualor 或 [The Economist Style Guide](http://www.economist.com/styleguide/introduction)。请将宽度限制为80列。我是 Oxford comma 的粉丝。
+
+不要觉得工作必须完美才能提交，我很高兴为你修正，而且我相信其他人将来也会这样做。
+
+
+
