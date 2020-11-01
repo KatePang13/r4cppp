@@ -2,13 +2,13 @@
 
 ## If
 
-The `if` statement is pretty much the same in Rust as C++. One difference is
-that the braces are mandatory, but parentheses around the expression being tested
-are not. Another is that `if` is an expression, so you can use it the same way
-as the ternary `?:` operator in C++ (remember from the previous section that if the last
-expression in a block is not terminated by a semi-colon, then it becomes the
-value of the block). There is no ternary `?:` in Rust. So, the following two
-functions do the same thing:
+Rust 的`if`语句 和C++ 基本一样。少数区别在于：
+
+- 是 {} 是必需的，而条件表达式的 () 不是必需的。
+- if 是 一个表达式，因此可以像 C++ 的三目运算符 '?:' 那样使用
+  - 回忆一下上一节的知识，如果一个代码块内的最后一个表达式不是以 `;`终止，则它将作为代码块的值
+
+Rust 没有 `?:` ，下面2个函数实现的是类似`?:`的功能：
 
 ```rust
 fn foo(x: i32) -> &'static str {
@@ -33,12 +33,16 @@ fn bar(x: i32) -> &'static str {
 The first is a fairly literal translation of what you might write in C++. The
 second is better Rust style.
 
-You can also write `let x = if ...`, etc.
+第一个函数更像是 C++代码的直译，而第二个函数是更好的 Rust 风格。
+
+你也可以写成  `let x = if ...` 
 
 
 ## Loops
 
 Rust has while loops, again just like C++:
+
+Rust 跟C++ 一样，也有 `while` 循环
 
 ```rust
 fn main() {
@@ -50,8 +54,7 @@ fn main() {
 }
 ```
 
-There is no `do...while` loop in Rust, but there is the `loop` statement which
-just loops forever:
+Rust 没有 `do ... while`循环，不过有 `loop` 语句，可以无限循环：
 
 ```rust
 fn main() {
@@ -61,7 +64,7 @@ fn main() {
 }
 ```
 
-Rust has `break` and `continue` just like C++.
+Rust 同样也有 `break` 和 continue 。
 
 
 ## For loops
@@ -71,6 +74,8 @@ vector of integers and you want to print them all (we'll cover vectors/arrays,
 iterators, and generics in more detail in the future. For now, know that a
 `Vec<T>` is a sequence of `T`s and `iter()` returns an iterator from anything
 you might reasonably want to iterate over). A simple `for` loop would look like:
+
+Rust 也有 `for`循环，但是和C++有点不一样。假设你有一个整数数组，你想要打印所有的元素（后续，我们将更详细地讨论 vectors/arrays/iterators/generics ）。目前我们只需要知道，`Vec<T>` 是一个 `T`类型变量的序列， `iter()` 从你 想要迭代的任何对象中返回一个迭代器。下面是`for` 循环的一个简单示例：
 
 ```rust
 fn print_all(all: Vec<i32>) {
