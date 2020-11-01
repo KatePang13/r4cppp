@@ -1,38 +1,22 @@
 # Rust For Systems Programmers
 
-A Rust tutorial for experienced C and C++ programmers.
+一个面向C/C++程序员的Rust 教程.
 
 Jump to [contents](#contents).
 Jump to [contributing](#contributing).
 
-This tutorial is intended for programmers who already know how pointers and
-references work and are used to systems programming concepts such as integer
-widths and memory management. We intend to cover, primarily, the differences
-between Rust and C++ to get you writing Rust programs quickly without lots of
-fluff you probably already know.
+该教程是面向那些 理解指针和引用是如何工作的，并且已经习惯了整形变量宽度和内存管理的 程序员。我们 主要覆盖 Rust 和 C++ 间的差异，帮助你快速的编写Rust程序，而不需要去学习那些你已经知道的冗余知识点。
 
-Hopefully, Rust is a pretty intuitive language for C++ programmers. Most of the
-syntax is pretty similar. The big difference (in my experience) is that the
-sometimes vague concepts of good systems programming are strictly enforced by
-the compiler. This can be infuriating at first - there are things you want to
-do, but the compiler won't let you (at least in safe code), and sometimes these
-things *are* safe, but you can't convince the compiler of that. However, you'll
-quickly develop a good intuition for what is allowed. Communicating your own
-notions of memory safety to the compiler requires some new and sometimes
-complicated type annotations. But if you have a strong idea of lifetimes for
-your objects and experience with generic programming, they shouldn't be too
-tough to learn.
+理论上，Rust 对 C++ 程序员来说是非常亲切的，它们有很多相似的语法。以我的经验来看，最大的差异是：一些好的系统编程上的模糊概念，Rust 编译器上是强制执行的（将编程思想固化到编译器，倒逼程序员去做到，避免将问题留到程序运行阶段）。
 
-This tutorial started as a [series of blog posts](http://featherweightmusings.blogspot.co.nz/search/label/rust-for-c).
-Partly as an aid for me (@nrc) learning Rust (there is no better way to
-check that you have learnt something than to try and explain it to somebody
-else) and partly because I found the existing resources for learning Rust
-unsatisfactory - they spent too much time on the basics that I already knew and
-used higher level intuitions to describe concepts that could better be explained
-to me using lower level intuitions. Since then, the documentation for Rust has
-got *much* better, but I still think that existing C++ programmers are an
-audience who are a natural target for Rust, but are not particularly well
-catered for.
+- 一开始这会让程序员恼火-有些事情你想做，但是编译器不会（至少在安全代码中）允许您这样做，即使有时候这些事情是安全的，您也不能说服编译器这样做。
+- 但是，您将很快对编译器所允许的内容建立良好的直觉。
+  - **向编译器传达您自己的内存安全性概念需要一些新的，有时是复杂的类型注释**。
+  - 如果您对对象的生命周期有很深的了解，并且对通用编程有丰富的经验，那么学习它们就不会太困难。
+
+这个教程开始于我的一个 [博客系列](http://featherweightmusings.blogspot.co.nz/search/label/rust-for-c) 。
+
+这个教程一方面是对我（@nrc）学习Rust的一种帮助（没有比尝试向他人解释的方法来检查您是否学过的东西更好的方法），另一方面是因为我发现学习Rust的现有资源不尽人意——他们**在我已经知道的基础知识上花费了太多时间，并使用了较高级别的直觉来描述可以用较低级别的直觉更好地向我解释的概念**。尽管在那以后，Rust的文档在逐步完善，但是我仍然认为**现有的C ++程序员是Rust的天生目标，但Rust文档并没有很好地满足他们的需求**。
 
 
 ## Contents
