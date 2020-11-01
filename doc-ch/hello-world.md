@@ -116,18 +116,6 @@ fn main() {
 
 ## Why?
 
-I would like to motivate some of the language features above. Local type
-inference is convenient and useful without sacrificing safety or performance
-(it's even in modern versions of C++ now). A minor convenience is that language
-items are consistently denoted by keyword (`fn`, `let`, etc.), this makes
-scanning by eye or by tools easier, in general the syntax of Rust is simpler and
-more consistent than C++. The `println!` macro is safer than printf - the number
-of arguments is statically checked against the number of 'holes' in the string
-and the arguments are type checked. This means you can't make the printf
-mistakes of printing memory as if it had a different type or addressing memory
-further down the stack by mistake. These are fairly minor things, but I hope
-they illustrate the philosophy behind the design of Rust.
-
 首先我想夸一下上面提到的某些语言特性：
 
 - 本地类型推断在不牺牲安全性或性能的情况下既方便又实用（甚至现在在C ++的现代版本中）。
