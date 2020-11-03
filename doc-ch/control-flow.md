@@ -85,10 +85,9 @@ fn print_all(all: Vec<i32>) {
 }
 ```
 
-TODO also &all/all instead of all.iter()
+这里用 &all/all 替换 all.iter() 也是可以的。
 
-If we want to index over the indices of `all` (a bit more like a standard C++
-for loop over an array), you could do
+如果你想要用索引来遍历 all  (跟标准C++的for循环类似)， 你可以这样做：
 
 ```rust
 fn print_all(all: Vec<i32>) {
@@ -98,10 +97,9 @@ fn print_all(all: Vec<i32>) {
 }
 ```
 
-Hopefully, it is obvious what the `len` function does. TODO range notation
+这里  `len`函数的作用是很明显的。TODO range notation。
 
-A more Rust-like equivalent of the preceding example would be to use an
-enumerating iterator:
+更Rust风格的写法是这样的，使用一个enumerate迭代器：
 
 ```rust
 fn print_all(all: Vec<i32>) {
@@ -111,15 +109,23 @@ fn print_all(all: Vec<i32>) {
 }
 ```
 
-Where `enumerate()` chains from the iterator `iter()` and yields the current
-count and the element during iteration.
+`enumerate()`  从 iter() 开始迭代，并在迭代过程中产生当前计数和当前元素
 
-*The following example incorporates more advanced topics covered in the section
-on [Borrowed Pointers](borrowed.md).* Let's say you have a vector of integers
-and want to call the function, passing the vector by reference and have the
-vector modified in place. Here the `for` loop uses a mutable iterator which
-gives mutable refererences - the `*` dereferencing should be familiar to C++
-programmers:
+**注意：以上这几个print_all，传递的都是 Vec<i32> ，一次调用后，实参被move,不能再调用第二次**。
+
+```
+error[E0382]: use of moved value: `nums`
+ --> src/main.rs:5:15
+  |
+3 |     let nums = vec![1, 2, 3, 4];
+  |         ---- move occurs because `nums` has type `std::vec::Vec<i32>`, which does not implement the `Copy` trait
+4 |     print_all(nums);
+  |               ---- value moved here
+5 |     print_ref(nums);
+  |               ^^^^ value used here after move
+```
+
+下面的例子会涉及更高级的语言特性，将在 [Borrowed Pointers](borrowed.md) 进行详细介绍。假设你有一个整型的vector，希望调用这个函数，传递vector的指针，函数内对vector做原地修改。这里的for循环使用 mutable 迭代器，获取 mutable 的引用。`*` 是解引用操作符，与C++类似。
 
 ```rust
 fn double_all(all: &mut Vec<i32>) {
@@ -127,13 +133,17 @@ fn double_all(all: &mut Vec<i32>) {
         *a += *a;
     }
 }
+
+//调用
+//类型声明的时候必须是mut,才可以转 &mut
+let mut nums = vec![1, 2, 3, 4];
+double_all(&mut nums);
 ```
 
 
 ## Switch/Match
 
-Rust has a match expression which is similar to a C++ switch statement, but much
-more powerful. This simple version should look pretty familiar:
+Rust 有 match 表达式，类似 C++的 switch语句，比 switch 更强大。简单的例子如下：
 
 ```rust
 fn print_some(x: i32) {
@@ -156,6 +166,15 @@ for 0, 1, and 10, but there are obviously lots of other integers which don't get
 matched. In that last arm, `y` is bound to the value being matched (`x` in this
 case). We could also write:
 
+这里有一些语法差异：
+
+- 我们使用 `=>` 来做分支跳转，各个分支用 `,` 分割（最后一个`,`可有可无）。
+
+还有一些比较不明显的差异，
+
+- **匹配项必须是完备的**，所有可能的情况都必须覆盖。可以尝试移除  `y=>...` 行，看看会发生什么；
+  - 那是因为我们只有0、1和10的匹配项，但是显然还有许多其他整数不匹配。在最后一个分支中，“ y”绑定到要匹配的值（在这种情况下为“ x”）。我们也可以这样写：
+
 ```rust
 fn print_some(x: i32) {
     match x {
@@ -164,12 +183,11 @@ fn print_some(x: i32) {
 }
 ```
 
-Here the `x` in the match arm introduces a new variable which hides the argument
-`x`, just like declaring a variable in an inner scope.
+在这个match内部引入了一个新的变量x, 这跟在一个scope内部定义一个变量是一样的。
 
-If we don't want to name the variable, we can use `_` for an unnamed variable,
-which is like having a wildcard match. If we don't want to do anything, we can
-provide an empty branch:
+如果你不希望给这个变量命名，可以使用`_` 指代 匿名变量，就像是有一个通配符匹配。
+
+如果你不想做任何操作，可以写成一个 空分支 `{}`。
 
 ```rust
 fn print_some(x: i32) {
@@ -182,12 +200,7 @@ fn print_some(x: i32) {
 }
 ```
 
-Another semantic difference is that there is no fall through from one arm to the
-next so it works like `if...else if...else`.
-
-We'll see in later posts that match is extremely powerful. For now I want to
-introduce just a couple more features - the 'or' operator for values and `if`
-clauses on arms. Hopefully an example is self-explanatory:
+另一个语义差异是：没有从一个分支到另一条分支的顺延（C++的 switch ，一个分支如果没有break，会顺序往下一个分支走），所以它的工作原理类似于 `if ... else if ... else`。我们将在以后的文章中看到match的功能非常强大。这里我想介绍的是一些额外的特性，在match 内可以配合 条件判断使用，具体如下所示：
 
 ```rust
 fn print_some_more(x: i32) {
@@ -200,8 +213,7 @@ fn print_some_more(x: i32) {
 }
 ```
 
-Just like `if` expressions, `match` statements are actually expressions so we
-could re-write the last example as:
+和`if`表达式一样， match语句实际上是表达式，因此我们可以将最后一个示例重写为：
 
 ```rust
 fn print_some_more(x: i32) {
@@ -216,21 +228,19 @@ fn print_some_more(x: i32) {
 }
 ```
 
-Note the semi-colon after the closing brace, that is because the `let` statement
-is a statement and must take the form `let msg = ...;`. We fill the rhs with a
-match expression (which doesn't usually need a semi-colon), but the `let`
-statement does. This catches me out all the time.
+注意  这个 {} 后面的分号，因为 let 语句是一个语句，格式必须是  `let msg = ...; ` 。 match 表达式不需要分号，但是 let语句需要。
 
-Motivation: Rust match statements avoid the common bugs with C++ switch
-statements - you can't forget a `break` and unintentionally fall through; if you
-add a case to an enum (more later on) the compiler will make sure it is covered
-by your `match` statement.
+Motivation:  Rust match 语句 规避了 C++ switch 语句中的常见BUG：如果你漏掉了 break，就会造成意料之外的向下一个分支执行；如果你为 enum 添加了一个case，编译器将会验证你保证所有的case都有在match中被覆盖。
+
+
 
 
 ## Method call
 
-Finally, just a quick note that methods exist in Rust, similarly to C++. They
-are always called via the `.` operator (no `->`, more on this in another post).
-We saw a few examples above (`len`, `iter`). We'll go into more detail in the
-future about how they are defined and called. Most assumptions you might make
-from C++ or Java are probably correct.
+Rust中的方法与C++很相似，方法总是使用 `.`操作符来调用（而不是`->` ,在另一篇文章会有更多的介绍）。
+
+我们上面看到了 `len`, `iter`的方法的使用。
+
+后续我们会深入细节，介绍方法的定义和调用。
+
+在方法上，Rust 与C++, java 整体上是一致。
