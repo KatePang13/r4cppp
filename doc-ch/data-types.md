@@ -1,17 +1,10 @@
 # Data types
 
-In this post I'll discuss Rust's data types. These are roughly equivalent to
-classes, structs, and enums in C++. One difference with Rust is that data and
-behaviour are much more strictly separated in Rust than C++ (or Java, or other
-OO languages). Behaviour is defined by functions and those can be defined in
-traits and `impl`s (implementations), but traits cannot contain data, they are
-similar to Java's interfaces in that respect. I'll cover traits and impls in a
-later post, this one is all about data.
+本篇中，我将讨论 Rust 的数据类型。这些大体上等效于C ++中的类，结构和枚举。其中一个不同是Rust的数据和行为是严格分开的，相比于 C++或 java 等 面向对象语言。行为 通过函数来定义，可以定义在 `traits` 和 `impls` （implementations）中，但是 `traits` 不能包含数据，它们和java中的接口很像。后面的章节我们会讨论  `traits` 和 `impls` 。本章讨论的的都是关于数据的。
 
 ## Structs
 
-A rust struct is similar to a C struct or a C++ struct without methods. Simply a
-list of named fields. The syntax is best seen with an example:
+rust struct 就像 C/C++ 中不带方法的 struct。struct 就是一个包含若干个命名字段的列表。语法如下所示：
 
 ```rust
 struct S {
@@ -20,16 +13,14 @@ struct S {
 }
 ```
 
-Here we define a struct called `S` with two fields. The fields are comma
-separated; if you like, you can comma-terminate the last field too.
+这里，我们定义了一个 名为 `S`的 结构体。
 
-Structs introduce a type. In the example, we could use `S` as a type.
-`SomeOtherStruct` is assumed to be another struct (used as a type in the
-example), and (like C++) it is included by value, that is, there is no pointer
-to another struct object in memory.
+- 每个字段使用 `,` 分隔；
+- 最后一个字段的 `,` 可以省略。
 
-Fields in structs are accessed using the `.` operator and their name. An example
-of struct use:
+定义一个结构体即引入一个新的类型。这里，我们可以 将 `S`作为一个类型使用。`SomeOtherStruct` 这里假设是另外一个自定义的结构体（在例子中作为类型来使用），并且（和C++一样）它包含在值中，也就是说，内存中没有指向另一个结构对象的指针
+
+结构体中的字段可以使用 `.` 和字段名 进行访问。示例：
 
 ```rust
 fn foo(s1: S, s2: &S) {
@@ -40,12 +31,9 @@ fn foo(s1: S, s2: &S) {
 }
 ```
 
-Here `s1` is struct object passed by value and `s2` is a struct object passed by
-reference. As with method call, we use the same `.` to access fields in both, no
-need for `->`.
+这里  `S1` 是一个结构体对象，以值的形式传递；`S2` 是一个结构体对象，以 引用的形式传递。
 
-Structs are initialised using struct literals. These are the name of the struct
-and values for each field. For example,
+结构体使用 struct literals (结构体列表) 来初始化，示例如下：
 
 ```rust
 fn foo(sos: SomeOtherStruct) {
@@ -54,11 +42,7 @@ fn foo(sos: SomeOtherStruct) {
 }
 ```
 
-Structs cannot be recursive; that is, you can't have cycles of struct names
-involving definitions and field types. This is because of the value semantics of
-structs. So for example, `struct R { r: Option<R> }` is illegal and will cause a
-compiler error (see below for more about Option). If you need such a structure
-then you should use some kind of pointer; cycles with pointers are allowed:
+**结构体不可以递归**；就是说，字段的类型不能与结构体的类型一样。这是因为结构是值语义的。举个例子，`struct R {r: Option<R>}`是非法的，会造成编译器错误（有关Option的更多信息，后面将有讨论）。如果你需要这样的结构体，你可以使用指针；**类型的指针递归是允许的**。示例：
 
 ```rust
 struct R {
@@ -66,12 +50,9 @@ struct R {
 }
 ```
 
-If we didn't have the `Option` in the above struct, there would be no way to
-instantiate the struct and Rust would signal an error.
+如果上面的结构中没有Option，那么将无法实例化该结构，Rust会发出错误信号。
 
-Structs with no fields do not use braces in either their definition or literal
-use. Definitions do need a terminating semi-colon though, presumably just to
-facilitate parsing.
+没有字段的结构在其定义或文字使用中均不使用花括号。任何定义语句都需要终止的分号，不过大概只是为了便于解析。
 
 ```rust
 struct Empty;
@@ -83,12 +64,7 @@ fn foo() {
 
 ## Tuples
 
-Tuples are anonymous, heterogeneous sequences of data. As a type, they are
-declared as a sequence of types in parentheses. Since there is no name, they are
-identified by structure. For example, the type `(i32, i32)` is a pair of
-integers and `(i32, f32, S)` is a triple. Tuple values are initialised in the
-same way as tuple types are declared, but with values instead of types for the
-components, e.g., `(4, 5)`. An example:
+Tuple(元组) ，元组是匿名的异构数据序列。作为一个类型，它们在括号中声明为一个若干数据类型的序列。由于没有名称，因此按结构进行标识。比如， `(i32, i32) ` 是一个 整数对，`(i32, f32, S)` 是一个三元组。元组值的初始化方法与声明元组类型的方法相同，就是用值代替字段的类型，比如 `(4, 5)` 。示例：
 
 ```rust
 // foo takes a struct and returns a tuple
@@ -97,7 +73,7 @@ fn foo(x: SomeOtherStruct) -> (i32, f32, S) {
 }
 ```
 
-Tuples can be used by destructuring using a `let` expression, e.g.,
+元组可以使用  `let` 表达式来 解构。示例：
 
 ```rust
 fn bar(x: (i32, i32)) {
@@ -106,16 +82,12 @@ fn bar(x: (i32, i32)) {
 }
 ```
 
-We'll talk more about destructuring next time.
+后续我们将详细讨论 解构的方法 。
 
 
 ## Tuple structs
 
-Tuple structs are named tuples, or alternatively, structs with unnamed fields.
-They are declared using the `struct` keyword, a list of types in parentheses,
-and a semicolon. Such a declaration introduces their name as a type. Their
-fields must be accessed by destructuring (like a tuple), rather than by name.
-Tuple structs are not very common.
+Tuple structs 元组结构体，是命名的元组，或者说是 含 匿名字段的结构体。它使用`struct` 关键字，一个括号内的类型列表和一个分号来声明。这样的声明将其名称作为类型引入。**必须通过解构（和元组一样）来访问其字段，而不是通过名称来访问**。元组结构不是很常见。
 
 ```rust
 struct IntPoint (i32, i32);
@@ -127,10 +99,11 @@ fn foo(x: IntPoint) {
 }
 ```
 
+
+
 ## Enums
 
-Enums are types like C++ enums or unions, in that they are types which can take
-multiple values. The simplest kind of enum is just like a C++ enum:
+`enum` 枚举，类似于 C++ 的 `enum` 或者 `union`， 枚举是可以采用多个值的类型。最简单的枚举就像C ++枚举一样
 
 ```rust
 enum E1 {
@@ -151,7 +124,8 @@ fn foo() {
 However, Rust enums are much more powerful than that. Each variant can contain
 data. Like tuples, these are defined by a list of types. In this case they are
 more like unions than enums in C++. Rust enums are tagged unions rather than untagged unions (as in C++). 
-That means you can't mistake one variant of an enum for another at runtime<sup>[1](#1)</sup>. An example:
+
+但是，Rust的`enum` 功能更强大，每个变体都可以包含数据。就像元组一样，这些是由一个类型列表定义的，在这种情况下，它更像是 C++中的 `union` 而不是 `enum` 。Rust `enum` 更像是C++中的 带tag 的 `union` 而不是 不带 tag 的 union。 这意味着您不会在运行时将枚举的一个变体误认为另一个变体 <sup>[1](#1)</sup>. 示例：
 
 ```rust
 enum Expr {
@@ -165,12 +139,9 @@ fn foo() {
 }
 ```
 
-Many simple cases of object-oriented polymorphism are better handled in Rust
-using enums.
+在Rust中使用枚举可以更好地处理许多面向对象多态的简单情况。
 
-To use enums we usually use a match expression. Remember that these are similar
-to C++ switch statements. I'll go into more depth on these and other ways to
-destructure data next time. Here's an example:
+`enum` 经常是配合 `match` 一起使用的。记住，这和 C++ 的 `switch` 是类似的。下次，我将更深入地探讨这些内容，和解构 数据的各种方法。示例：
 
 ```rust
 fn bar(e: Expr) {
@@ -182,25 +153,25 @@ fn bar(e: Expr) {
 }
 ```
 
-Each arm of the match expression matches a variant of `Expr`. All variants must
-be covered. The last case (`_`) covers all remaining variants, although in the
-example there is only `Lit`. Any data in a variant can be bound to a variable.
-In the `Add` arm we are binding the two i32s in an `Add` to `x` and `y`. If we
-don't care about the data, we can use `..` to match any data, as we do for `Or`.
+`match` 的每个分支匹配 `Expr` 的一个 变体。所有的变体都必须覆盖。最后一个分支 `_` 覆盖所有剩余的变体，虽然在示例中只有`Lit`一种剩余变体 。 一个变体中的任意数据都可以绑定变量。Add 分支中，我们将两个 `i32`绑定给2个变量  x, y。如果我不关系这些数据，可以使用 `..` 来匹配任意数据，就像上面的 `Or`分支。
+
+
 
 
 ## Option
 
-One particularly common enum in Rust is `Option`. This has two variants - `Some`
-and `None`. `None` has no data and `Some` has a single field with type `T`
-(`Option` is a generic enum, which we will cover later, but hopefully the
-general idea is clear from C++). Options are used to indicate a value might be
-there or might not. Any place you use a null pointer in C++<sup>[2](#2)</sup>.
-to indicate a value which is in some way undefined, uninitialised, or false,
-you should probably use an Option in Rust. Using Option is safer because you
-must always check it before use; there is no way to do the equivalent of
-dereferencing a null pointer. They are also more general, you can use them with
-values as well as pointers. An example:
+Rust中一个特别常见的枚举是Option，它有2个变体，分别是 `Some` 和 `None`。
+
+- `None` 没有数据
+- `Some` 有 唯一的一个字段，类型为 `T` 。
+
+(Option 是一个通用的`enum`， 后面我们会讨论到，但这里希望C ++的经验可以帮助你清楚地了解总体思路 )。
+
+Option 用于声明一个值可能有，可能没有。C++中你经常使用 空指针 来检查合法性，来表明一个值某些情况下可能为定义，未初始化，或者 是错误的。
+
+Rust中 你应该使用 `Option`。 **使用 `Option` 更安全**，因为它**强制你在使用变量前必须要做检查**；这样你就不可能去解引用一个空指针了。
+
+**`Option` 也更加通用，你可以用它来携带 值或者指针**，示例：
 
 ```rust
 use std::rc::Rc;
@@ -218,20 +189,13 @@ fn is_root(node: Node) -> bool {
 }
 ```
 
-Here, the parent field could be either a `None` or a `Some` containing an
-`Rc<Node>`. In the example, we never actually use that payload, but in real life
-you usually would.
+这里，parent 字段 可以是  `None` 或者 包含一个 `Rc<Node>` 的`Some` 。 在该示例中，我们没有真正发挥它的威力，但在实际开发中会经常使用。
 
 
-There are also convenience methods on Option, so you could write the body of
-`is_root` as `node.parent.is_none()` or `!node.parent.is_some()`.
 
 ## Inherited mutability and Cell/RefCell
 
-Local variables in Rust are immutable by default and can be marked mutable using
-`mut`. We don't mark fields in structs or enums as mutable, their mutability is
-inherited. This means that a field in a struct object is mutable or immutable
-depending on whether the object itself is mutable or immutable. Example:
+Rust的本地变量默认是不可变的，可以使用 `mut` 标记为 可变**。我们不会将 `struct` 或者 `enum` 中的字段标记为可变，它们的可变性是遗传的**。这意味着 **一个字段的可变性取决于它所属的结构体对象的可变性**。示例：
 
 ```rust
 struct S1 {
@@ -255,9 +219,7 @@ fn main() {
 }
 ```
 
-Inherited mutability in Rust stops at references. This is similar to C++ where
-you can modify a non-const object via a pointer from a const object. If you want
-a reference field to be mutable, you have to use `&mut` on the field type:
+可变性异常会被 引用 终止。这和C++是类似的，在C ++中，您可以通过const对象中的指针来修改非const对象。如果你想要一个引用字段是可变的，你必须在这个字段类型上使用 `&mut` 。
 
 ```rust
 struct S1 {
@@ -282,42 +244,23 @@ fn main() {
 }
 ```
 
-(The `'a` parameter on `S2` and `S3` is a lifetime parameter, we'll cover those soon).
+( S2, S3中的  `'a` 参数 是 生命期参数，之后我们会讨论到 )。 
 
-Sometimes whilst an object is logically immutable, it has parts which need to be
-internally mutable. Think of various kinds of caching or a reference count
-(which would not give true logical immutability since the effect of changing the
-ref count can be observed via destructors). In C++, you would use the `mutable`
-keyword to allow such mutation even when the object is const. In Rust we have
-the Cell and RefCell structs. These allow parts of immutable objects to be
-mutated. Whilst that is useful, it means you need to be aware that when you see
-an immutable object in Rust, it is possible that some parts may actually be
-mutable.
+有时，虽然对象在逻辑上是不可变的，但它的某些部分需要内部可变。考虑各种类型的缓存或引用计数就是这种情况（由于可以通过析构函数观察更改引用计数的效果，因此不会提供真正的逻辑不变性）。在C ++中，即使对象是const，也可以使用mutable关键字来允许这种突变。在Rust中，我们拥有有 Cell和RefCell结构。这些允许对不可变对象的某些部分进行突变。尽管这很有用，但它意味着您需要注意，**当您在Rust中看到不可变对象时，某些字段实际上可能是可变的**。
 
-RefCell and Cell let you get around Rust's strict rules on mutation and
-aliasability. They are safe to use because they ensure that Rust's invariants
-are respected dynamically, even though the compiler cannot ensure that those
-invariants hold statically. Cell and RefCell are both single threaded objects.
+RefCell和Cell使你可以绕开Rust关于突变和别名的严格规则。使用它们是安全的，因为它们确保动态遵循 Rust的，即使编译器无法确保静态保持不变。`Cell` 和 `RefCell` 都是单线程对象。
 
-Use Cell for types which have copy semantics (pretty much just primitive types).
-Cell has `get` and `set` methods for changing the stored value, and a `new`
-method to initialise the cell with a value. Cell is a very simple object - it
-doesn't need to do anything smart since objects with copy semantics can't keep
-references elsewhere (in Rust) and they can't be shared across threads, so there
-is not much to go wrong.
+具有 拷贝语言的类型使用 `Cell`（几乎只有原始类型）。`Cell` 有 `get/set`方法来修改保存的值，`new` 方法来初始化一个 cell。
 
-Use RefCell for types which have move semantics, that means nearly everything in
-Rust, struct objects are a common example. RefCell is also created using `new`
-and has a `set` method. To get the value in a RefCell, you must borrow it using
-the borrow methods (`borrow`, `borrow_mut`, `try_borrow`, `try_borrow_mut`)
-these will give you a borrowed reference to the object in the RefCell. These
-methods follow the same rules as static borrowing - you can only have one
-mutable borrow, and can't borrow mutably and immutably at the same time.
-However, rather than a compile error you get a runtime failure. The `try_`
-variants return an Option - you get `Some(val)` if the value can be borrowed and
-`None` if it can't. If a value is borrowed, calling `set` will fail too.
+`Cell` 是一个非常简单的对象：它不需要做任何明智的事情，因为具有复制语义的对象无法将引用保留在其他地方（在Rust中），并且它们不能在线程之间共享，因此没有太多可能出错的地方。
 
-Here's an example using a ref-counted pointer to a RefCell (a common use-case):
+具有移动语义的类型 使用 `RefCell` ，Rust 中的大多数类似都是 移动语义的，结构体对象就是一个常见的例子。`RefCell`  也是有 `new` 方法用以创建，`set`方法由于修改值。要获取 `RefCell` 的值，必须使用 borrow方法来 借用它，(borrow方法包含：borrow, borrow_mut, try_borrow, try_borrow_mut)，这些方法会返回一个 borrowed 引用，指向 `RefCell` 中的对象。
+
+这些方法遵循与静态借用相同的规则：**只能有一个可变借用，并且不能同时有可变和不可变借用**。**否则，您会触发运行时失败， 而不是编译错误**。
+
+try_变体方法 会返回一个Option：**如果可以借用该值，则将获得Some（val）；如果不能，则将返回None**。如果值已经被其他人借用，则调用set也将失败。
+
+这里有个示例，在 一个引用技术指针上 使用 `RefCell` (这是一个常见的用例) ：
 
 ```rust
 use std::rc::Rc;
@@ -349,16 +292,14 @@ fn main() {
 }
 ```
 
-If you're using Cell/RefCell, you should try to put them on the smallest object
-you can. That is, prefer to put them on a few fields of a struct, rather than
-the whole struct. Think of them like single threaded locks, finer grained
-locking is better since you are more likely to avoid colliding on a lock.
+如果你使用  `Cell` `RefCell` , 你应该 尝试将 它们放在 尽可能小的对象上。也就是说，尽量将它们放在结构体的某些字段上，而不是放在整个结构体上。可以联想 单线程锁，**细粒度的锁定效果更好**，因为您更有可能避免命中锁。
 
 
 ##### 1
 
-In C++17 there is `std::variant<T>` type that is closer to Rust enums than unions.
+C++17， 引入了   `std::variant<T>`类型， 这个更接近 Rust 的 `enum` ，而不是 `union`
 
 ##### 2
 
-Since C++17 `std::optional<T>` is the best alternative of Option in Rust.
+C++17, 引入了 `std::optional<T>`， 是 Rust 中 的 `Option`   之外的最佳选择
+
