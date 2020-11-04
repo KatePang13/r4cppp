@@ -9,12 +9,16 @@ in C++. Rust has a few more, rarer pointers either in the libraries or built in
 to the language. These are mostly similar to various kinds of smart pointers you
 might be used to in C++.
 
+到这里，我们已经讨论了  unique 和 borrowed pointer 。 Unique pointer 和 `std:unique_ptr` 非常像，borrowed references 则是Rust中的默认指针， C++大多数情况下指针和引用的 使用场景都可以用  borrowed references。Rust在库中或在语言中内置了一些更罕见的指针。这些大多类似于在C ++中使用过的各种智能指针。
+
 This post took a while to write and I still don't like it. There are a lot of
 loose ends here, both in my write up and in Rust itself. I hope some will get
 better with later posts and some will get better as the language develops. If
 you are learning Rust, you might even want to skip this stuff for now, hopefully
 you won't need it. Its really here just for completeness after the posts on
 other pointer types.
+
+这篇文章花了一段时间才写，但我还是不满意。无论是在我撰写的文章还是在Rust本身，这块都存在很多松散的的细枝末节。我希望有一些问题会在后续的文章中得到解决，另一些问题能随着语言的发展变得更好。如果你正在学习Rust，你目前可以先跳过这部分，如果你暂时还不需要。本篇放在在其他指针类型的文章之后，就是为了保证这个话题的完整性。
 
 It might feel like Rust has a lot of pointer types, but it is pretty similar to
 C++ once you think about the various kinds of smart pointers available in
