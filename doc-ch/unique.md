@@ -80,12 +80,7 @@ fn bar() {
 
 这里，内存在 foo 里 初始化，并返回给 bar。x 从 foo返回，并存放在 y, 所以不会被删除。在 bar 结束时，y 离开scope，所以内存被回收。
 
-Owning pointers are unique (also called linear) because there can be only one
-(owning) pointer to any piece of memory at any time. This is accomplished by
-move semantics. When one pointer points at a value, any previous pointer can no
-longer be accessed. E.g.,
-
-owning指针是独占的(也叫线性的)，因为对于任何一块内存的，在任何时刻只会有一个(owning)指针。这是通过移动语义来完成的。当一个指针指向一个值时，先前的指针都不再可访问。
+owning指针是独占的(也叫线性的)，因为对于任何一块内存的，在任何时刻只能有一个(owning)指针。这是通过移动语义来完成的。当一个指针指向一个值时，先前的指针都不再可访问。示例：
 
 ```rust
 fn foo() {
