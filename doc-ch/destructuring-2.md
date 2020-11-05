@@ -6,6 +6,8 @@ really well, but worth discussing (it took me a while to figure out, that's for
 sure. Longer than I realised, in fact, since I screwed up the first version of
 this blog post).
 
+涉及到 borrowing 的时候，解构 可能会有一些意外的问题。理论上，如果你已经很好地理解了 borrowed 引用，就不会有什么问题，但是这仍然是很值得讨论的。
+
 Imagine you have some `&Enum` variable `x` (where `Enum` is some enum type). You
 have two choices: you can match `*x` and list all the variants (`Variant1 =>
 ...`, etc.) or you can match `x` and list reference to variant patterns
@@ -16,6 +18,16 @@ interact with match expressions in surprising ways (at least surprising to me),
 especially when you are modifying an existing enum in a seemingly innocuous way
 and then the compiler explodes on a match somewhere.
 
+假设你有一个 `&Enum` 变量 x (这里Enum 是一个 enum 类型)。你有两种选择：
+
+- match `*x` 并列举所有 `variant`，`variant1 =>..., 等`
+  - 考虑到代码风格，应该尽量采用第一种，语法更清晰简单。
+- natch  `x`  并列举所有 `variant`的引用 ，`&variant1 =>..., 等`
+  - x 是 一个 borrowed 引用，
+    - 对于 什么情况下borrowed引用可以被解引用， 有一些很严苛的规则
+    - borrowed 与  match 之间会有很惊喜的化学反应，特别是当你 修改一个已有的enum
+      - 看似没有什么问题，但是编译器在 match 中 炸了	
+
 Before we get into the details of the match expression, lets recap Rust's rules
 for value passing. In C++, when assigning a value into a variable or passing it
 to a function there are two choices - pass-by-value and pass-by-reference. The
@@ -25,6 +37,8 @@ pass or assignment with `&`, then the value is passed by reference - only a
 pointer to the value is copied and when you operate on the new variable, you are
 also operating on the old value.
 
+在我们深入 match 表达式的细节之前，我们先来回顾以下 Rust 的值传递。在C++, 当我们给变量分配值时，或者将值传递给一个函数时，有2种方式：值传递和引用传递。前者是默认方式，这种方式意味着值发生了拷贝，或许是用拷贝构造器，或许是 字节拷贝 。如果用 `&` 注释形参或者 赋值目标，则该值将通过引用传递-仅复制指向该值的指针，并且当您对新变量做操作时，同时也是对旧值做了操作。
+
 Rust has the pass-by-reference option, although in Rust the source as well as
 the destination must be annotated with `&`. For pass-by-value in Rust, there are
 two further choices - copy or move. A copy is the same as C++'s semantics
@@ -32,6 +46,16 @@ two further choices - copy or move. A copy is the same as C++'s semantics
 but destroys the old value - Rust's type system ensures you can no longer access
 the old value. As examples, `i32` has copy semantics and `Box<i32>` has move
 semantics:
+
+Rust 也可以 引用传递，要注意的是 Rust 的 原变量和目的变量都必须使用 `&` 标注。
+
+Rust 的值传递，有2种选择：复制(copy) 或者 移动(move)
+
+- copy  和 C++ 语义上是一致的 （不过Rust没有拷贝构造器）
+- move  将旧值拷贝，但是销毁 旧值
+  - Rust 类型系统确保你不会再访问到旧值
+
+比如， `i32` 是 拷贝语义，`Box<i32>`  是移动语义。
 
 ```rust
     fn foo() {
@@ -54,6 +78,8 @@ Destructors probably need a post of their own, but for now, an object
 in Rust has a destructor if it implements the `Drop`trait. 
 Just like C++, the destructor is executed just before an object is 
 destroyed.
+
+自定义类型默认都是移动语义，你可以通过实现  `Copy` trait 来添加 移动语义。一个直接的方法是再定义 `struct`前添加 `#[derive(Copy)]` 。不是所有的自定义类型都允许实现  `Copy` trait 。`struct` 的所有`field`都必须实现`Copy` ，并且类型必须有析构函数。析构函数应该有自己的指责，但是目前，Rust中的对象如果实现了`Drop` trait，就认为具有析构函数。与C ++一样，析构函数在对象被销毁之前执行。
 
 Now, it is important that a borrowed object is not moved, otherwise you would
 have a reference to the old object which is no longer valid. This is equivalent
