@@ -12,7 +12,7 @@ implementation. My preferred approach uses arena allocation and makes slightly
 advanced use of explicit lifetimes. I'll finish up by discussing a few potential
 Rust features which would make using such an approach easier.
 
-在 Rust 中构建 图 是有一点尴尬的，因为 Rust 严格的生命周期 和 可变性 需要。对象的图 在面向对象语言中是非常常见的。在本教程中，我将用一些不一样的方法实现。我更偏爱的方法是使用  arena 分配 和 少量使用 生命周期。最后，我将讨论一些潜在的Rust功能，这些功能将使实现方法更加容易。
+在 Rust 中构建 图 是有一点尴尬的，因为 Rust 严格的生命周期 和 可变性 的要求。对象的图 在面向对象语言中是非常常见的。在本教程中，我将用一些不一样的方法实现。我更偏爱的方法是使用  arena 分配 和 少量使用 生命周期。最后，我将讨论一些潜在的Rust功能，这些功能将使实现方法更加容易。
 
 A [graph](http://en.wikipedia.org/wiki/Graph_%28abstract_data_type%29) is a
 collection of nodes with edges between some of those nodes. Graphs are a
