@@ -7,8 +7,12 @@ rarely and are not very ergonomic. C++11 introduced lambdas, and these are
 pretty close to Rust closures, in particular they have a very similar
 implementation strategy.
 
+必包  和 高阶函数 是 Rust的一个核心部分。在C/C++中，有函数指针，然而它们使用场景很少，且很不符合任何思维。C++11 引入了 lambda 表达式，这个和 Rust的闭包更接近，特别是它们具有非常相似的实现策略。
+
 To start with, I want to establish some intuition for these things. Then, we'll
 dive in to the details.
+
+首先，我想为这些东西建立一些直觉的印象。然后再将深入研究细节。
 
 Lets say we have a function `foo`: `pub fn foo() -> u32 { 42 }`. Now let's
 imagine another function `bar` which takes a function as an argument (I'll leave
@@ -16,10 +20,14 @@ imagine another function `bar` which takes a function as an argument (I'll leave
 `bar` kind of like we would pass a function pointer in C: `bar(foo)`. In the
 body of `bar` we can call `f` as if it were a function: `let x = f();`.
 
+假设我们有一个函数 `foo` : `pub fn foo() -> u32 {42}` 。想象有另一个函数 `bar` ，接收一个函数作为参数（我会给出bar的函数声明，供后续使用）： `fn bar(f: ...) {...}` 。 我们可以把 `foo`传递给 `bar`，就像 C语言中，传递函数指针作为参数。再`bar`的函数体中，我可以调用 `f` ，就像它是一个函数 ： `let x = f();`
+
 We say that Rust has first-class functions because we can pass them around and
 use them like we can with other values. We say `bar` is a higher-order function
 because it takes a function as an argument, i.e., it is a function that operates
 on functions.
+
+我们说 Rust 有 first-class 函数，因为我们可以传递它们，并像其他值一样使用它们。我们说 `bar` 是 一个 告诫函数，因为它接收函数作为参数，也就是说，它是对函数做操作的函数。
 
 Closures in Rust are anonymous functions with a nice syntax. A closure `|x| x +
 2` takes an argument and returns it with `2` added. Note that we don't have to
@@ -28,9 +36,13 @@ also don't need to specify a return type. If we want the closure body to be more
 than just one expression, we can use braces: `|x: i32| { let y = x + 2; y }`. We
 can pass closures just like functions: `bar(|| 42)`.
 
+Rust中的闭包是具有良好语法的匿名函数。一个闭包 `|x| x + 2` 接收一个参数x，并返回 x+2。注意，不需要我们必须指定闭包的参数类型(其类型通常可以推断)。我们也不需要指定 返回类型。如果我们 希望闭包体更像函数，而不是一个简单的表达式，我们可以写成  `|x: i32| {let y = x+2; y}` 。我们可以像函数一样传递闭包：`bar(|| 42)`
+
 The big difference between closures and other functions is that closures capture
 their environment. This means that we can refer to variables outside the closure
 from the closure. E.g.,
+
+闭包与其他函数的最大的差别是，闭包快照了它所在的外部环境。这意味着我们可以访问 闭包外面的函数。
 
 ```rust
 let x = 42;
@@ -42,6 +54,10 @@ Note how `x` is in scope in the closure.
 We've seen closures before, used with iterators, and this is a common use case
 for them. E.g., to add a value to each element of a vector:
 
+注意  x 在 闭包中的scope。
+
+我们之前已经见过闭包，它与迭代器一起使用，这是它们的常见用例。例如，向向量的每个元素添加值：
+
 ```rust
 fn baz(v: Vec<i32>) -> Vec<i32> {
     let z = 3;
@@ -52,6 +68,8 @@ fn baz(v: Vec<i32>) -> Vec<i32> {
 Here `x` is an argument to the closure, each member of `v` will be passed as an
 `x`. `z` is declared outside of the closure, but because it's a closure, `z` can
 be referred to. We could also pass a function to map:
+
+这里有一个 closure 的参数 x，每个 v 的元素 都会 以一个 `x` 传递给闭包。`z`在闭包外定义，但因为这是个闭包，z仍然可以范文。我们还可以传递一个函数来用于map：
 
 ```rust
 fn add_two(x: i32) -> i32 {
